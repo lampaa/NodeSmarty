@@ -311,7 +311,7 @@ NodeSmarty.func = {
 		if(inde == undefined) {
 			var inde = true;
 		}
-		var new_var='', list, var_tmp;
+		var new_var='', list='', var_tmp='';
 		
 		if(variab instanceof Array) {
 			this._syntax_error("error variable");
@@ -339,9 +339,27 @@ NodeSmarty.func = {
 			if(variab[0] == '$') {
 				var_tmp = (variab.substr(1)).split('.');
 	
-				for(var i=0; i < var_tmp.length; i++) {
-					list = "['"+var_tmp[i]+"']";
+				if(this._foreach_master['if'] == true && var_tmp.length > 1) {
+					for(var i=1; i < var_tmp.length; i++) {
+						if(var_tmp[i][0] == '$') {
+							list += "["+this._parse_vars(var_tmp[i], inde)+"]";
+						}
+						else {
+							list += "['"+var_tmp[i]+"']";
+						}
+					}
 				}
+				else {
+					for(var i=0; i < var_tmp.length; i++) {
+						if(var_tmp[i][0] == '$') {
+							list += "["+this._parse_vars(var_tmp[i], inde)+"]";
+						}
+						else {
+							list += "['"+var_tmp[i]+"']";
+						}
+					}					
+				}
+				
 				return "__this.assignes"+list;
 			}
 			else {
