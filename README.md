@@ -1,4 +1,4 @@
-<h1>All documentation and new on site: <a href='NodeSmarty.com' target='_blank'>NodeSmarty.com</a></h1>
+<h1>All documentation and new on site: <a href='http://NodeSmarty.com' target='_blank'>NodeSmarty.com</a></h1>
 
 <hr>
 
