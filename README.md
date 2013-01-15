@@ -1,3 +1,7 @@
+<h1>All documentation and new on site: <a href='NodeSmarty.com' target='_blank'>NodeSmarty.com</a></h1>
+
+<hr>
+
 <h1>Quick start</h1>
 Легкое подключение и запуск библиотеки. Минимальное количество настроек, а также удобное представление функций позволяет вам наслаждаться программированием вместе с шаблонизатором <b>NodeSmarty</b>. 
 
