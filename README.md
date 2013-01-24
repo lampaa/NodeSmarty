@@ -6,7 +6,7 @@
 Легкое подключение и запуск библиотеки. Минимальное количество настроек, а также удобное представление функций позволяет вам наслаждаться программированием вместе с шаблонизатором <b>NodeSmarty</b>. 
 
 
-<pre>
+```js
 var NodeSmarty = require('../controllers/NodeSmarty');
 
 var Template = new NodeSmarty();
@@ -15,14 +15,14 @@ Template
    .setTemplateDir('./views/templates/')
    .setCompileDir('./views/compile/')
    .setCacheDir('./views/cache/'); 
-</pre>
+```
 
 <hr>
 
 <h1>Easy use</h1>
 Добавляйте свои переменные в код объекта <b>NodeSmarty</b> с помощью функции <i>assign</i>. Потом объявите переменные в шаблоне вашего проекта с помощью фигурных скобок (кстати их можно переопределить) и запускайте свой сайт!
 
-<pre>
+```js
 var Array = ['One', 'Two', 'Free'];
 
 Template.assign({
@@ -31,9 +31,9 @@ Template.assign({
    'Value3':'third',
    'Array':Array
 }); 
-</pre>
+```
 
-<pre>
+```smarty
 Value: {$Value};
 Value2: {$Value2};
 {if $Value3} Value3: {$Value3} {/if}.
@@ -42,7 +42,7 @@ Array:
 {foreach from=$Array item=Foo}
    {$Foo}
 {/foreach} 
-</pre>
+```
 
 <hr>
 
