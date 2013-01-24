@@ -1,12 +1,14 @@
-<h1>All documentation and news on site: <a href='http://NodeSmarty.com' target='_blank'>NodeSmarty.com</a></h1>
+All documentation and news on site: [NodeSmarty.com](http://NodeSmarty.com)
+===========================================================================
 
 <hr>
 
-<h1>Quick start</h1>
+Quick start
+===========
 Легкое подключение и запуск библиотеки. Минимальное количество настроек, а также удобное представление функций позволяет вам наслаждаться программированием вместе с шаблонизатором <b>NodeSmarty</b>. 
 
 
-<pre>
+```js
 var NodeSmarty = require('../controllers/NodeSmarty');
 
 var Template = new NodeSmarty();
@@ -15,14 +17,16 @@ Template
    .setTemplateDir('./views/templates/')
    .setCompileDir('./views/compile/')
    .setCacheDir('./views/cache/'); 
-</pre>
+```
 
 <hr>
 
-<h1>Easy use</h1>
+Easy use
+========
+
 Добавляйте свои переменные в код объекта <b>NodeSmarty</b> с помощью функции <i>assign</i>. Потом объявите переменные в шаблоне вашего проекта с помощью фигурных скобок (кстати их можно переопределить) и запускайте свой сайт!
 
-<pre>
+```js
 var Array = ['One', 'Two', 'Free'];
 
 Template.assign({
@@ -31,9 +35,9 @@ Template.assign({
    'Value3':'third',
    'Array':Array
 }); 
-</pre>
+```
 
-<pre>
+```smarty
 Value: {$Value};
 Value2: {$Value2};
 {if $Value3} Value3: {$Value3} {/if}.
@@ -42,9 +46,10 @@ Array:
 {foreach from=$Array item=Foo}
    {$Foo}
 {/foreach} 
-</pre>
+```
 
 <hr>
 
-<h1>Fast processing</h1>
+Fast processing
+===============
 Все шаблоны при использовании проходят дополнительную обработку - компиляцию. Шаблон компилируется в чистый (<i>native</i>) <i>JavaScript</i> код, причем как компиляция, так и исполнение кода являются самыми быстрыми при сравнении с остальными шаблонизаторами!
