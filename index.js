@@ -1,7 +1,7 @@
 /**
  * NodeSmarty
  * @author lampa (http://nodesmarty.com, http://lampacore.ru/nodesmarty)
- * @version 1.beta
+ * @version 2.beta
  */
 exports = module.exports = NodeSmarty;
 
@@ -33,7 +33,7 @@ NodeSmarty.func = {
 		this.attrs_pre_regexp = /["\']?(\S\w*)["\']?\s*=\s*(["\'](.*?)["\']|(\S+))/g;
 		this.attrs_regexp = /["\']?(\S\w*)["\']?\s*=\s*(?:["\'](.+)["\']|(\S+))/;
 		
-		this.fs = require('fs');
+		this._fs = require('fs');
 	
 		/**
 		 * 
@@ -48,8 +48,8 @@ NodeSmarty.func = {
 		
 		this._template_tags_regexp = new RegExp(this.ldq+"\\s*(.*?)\\s*"+this.rdq,'g');
 		this._text_blocks_regexp = new RegExp(this.ldq+".*?"+this.rdq,'g')
-		this.searchLiteral_pre = new RegExp(this.ldq+"\\*([\\S\\s]*?)\\*"+this.rdq+"|"+this.ldq+"\\s*literal\\s*"+this.rdq+"([\\S\\s]*?)"+this.ldq+"\\s*/literal\\s*"+this.rdq+"|"+this.ldq+"\\s*javascript\\s*"+this.rdq+"([\\S\\s]*?)"+this.ldq+"\\s*/javascript\\s*"+this.rdq,'g');
-		this.searchLiteral = new RegExp(this.ldq+"\\s*([\\S\\s]*?)\\s*"+this.rdq+"(?:([\\S\\s]*?)"+this.ldq+"\s*\\/(.*?)\\s*"+this.rdq+"|)", '');
+		this._searchLiteral_pre = new RegExp(this.ldq+"\\*([\\S\\s]*?)\\*"+this.rdq+"|"+this.ldq+"\\s*literal\\s*"+this.rdq+"([\\S\\s]*?)"+this.ldq+"\\s*/literal\\s*"+this.rdq+"|"+this.ldq+"\\s*javascript\\s*"+this.rdq+"([\\S\\s]*?)"+this.ldq+"\\s*/javascript\\s*"+this.rdq,'g');
+		this._searchLiteral = new RegExp(this.ldq+"\\s*([\\S\\s]*?)\\s*"+this.rdq+"(?:([\\S\\s]*?)"+this.ldq+"\s*\\/(.*?)\\s*"+this.rdq+"|)", '');
 			
 		/**
 		 * 
@@ -70,7 +70,7 @@ NodeSmarty.func = {
 	 * setup template directory
 	 */
 	setTemplateDir: function (dir) {
-		stats = this.fs.lstatSync(dir);
+		var stats = this._fs.lstatSync(dir);
 
 		if (stats.isDirectory()) {
 			this._TemplateDir = dir;
@@ -85,7 +85,7 @@ NodeSmarty.func = {
 	 * setup compile directory
 	 */
 	setCompileDir: function(dir) {
-		stats = this.fs.lstatSync(dir);
+		var stats = this._fs.lstatSync(dir);
 
 		if (stats.isDirectory()) {
 			this._CompileDir = dir;
@@ -100,7 +100,7 @@ NodeSmarty.func = {
 	 * setup cache directory
 	 */
 	setCacheDir: function(dir) {
-		stats = this.fs.lstatSync(dir);
+		var stats = this._fs.lstatSync(dir);
 
 		if (stats.isDirectory()) {
 			this._CacheDir = dir;
@@ -166,7 +166,7 @@ NodeSmarty.func = {
 		
 		var _this = this;
 		//
-		this.fs.readdir(this._CacheDir, function(err, files) {
+		this._fs.readdir(this._CacheDir, function(err, files) {
 
 			for(var i=0; i < files.length; i++) {
 				var filePath = _this._CacheDir + files[i];
@@ -183,10 +183,10 @@ NodeSmarty.func = {
 			return this._syntax_error('clearCacheSync: cache dir not set');
 		}
 		
-		var files = this.fs.readdirSync(this._CacheDir); 
+		var files = this._fs.readdirSync(this._CacheDir); 
 		
 		for(var file in files) {	
-			this.fs.unlink(this._CacheDir+files[file]);
+			this._fs.unlink(this._CacheDir+files[file]);
 		}
 		return true;
 	},
@@ -201,7 +201,7 @@ NodeSmarty.func = {
 		
 		var _this = this;
 		//
-		this.fs.readdir(this._CompileDir, function(err, files) {
+		this._fs.readdir(this._CompileDir, function(err, files) {
 		
 			for(var i=0; i < files.length; i++) {
 				var filePath = _this._CompileDir + files[i];
@@ -218,10 +218,10 @@ NodeSmarty.func = {
 			return this._syntax_error('clearCompileSync: compile dir not set');
 		}
 		
-		var files = this.fs.readdirSync(this._CompileDir); 
+		var files = this._fs.readdirSync(this._CompileDir); 
 		
 		for(var file in files) {	
-			this.fs.unlink(this._CompileDir+files[file]);
+			this._fs.unlink(this._CompileDir+files[file]);
 		}
 		return true;
 	},
@@ -712,8 +712,8 @@ NodeSmarty.func = {
 	/**
 	 * console log
 	 */
-	_syntax_error: function(alert) {
-		console.warn(alert);
+	_syntax_error: function(err) {
+		throw err;
 		return false;
 	},
 	
@@ -721,20 +721,20 @@ NodeSmarty.func = {
 	 * delete literal && php tags
 	 */
 	_replacePreProcess: function (source) {
-		var match_pre = source.match(this.searchLiteral_pre);
+		var match_pre = source.match(this._searchLiteral_pre);
 		
 		if(match_pre == null) return source;
 		
 		for(var i=0; i < match_pre.length; i++) {
-			var match_work = match_pre[i].match(this.searchLiteral);
+			var match_work = match_pre[i].match(this._searchLiteral);
 			
 			if(match_work[2] == undefined) {
 				this._preCompiler[i] = match_work[1];
-				source = source.split(match_work[0]).join("{_preCompiler id='"+i+"' type='comment'}");
+				source = source.split(match_work[0]).join(this.ldq+"_preCompiler id='"+i+"' type='comment'"+this.rdq);
 			}
 			else {
 				this._preCompiler[i] = match_work[2];
-				source = source.split(match_work[0]).join("{_preCompiler id='"+i+"' type='"+match_work[1]+"'}");
+				source = source.split(match_work[0]).join(this.ldq+"_preCompiler id='"+i+"' type='"+match_work[1]+"'"+this.rdq);
 			}
 			
 		}
@@ -759,7 +759,7 @@ NodeSmarty.func = {
 			compiled_tags.push(this._parseTags(template_tags[i]));
 		}
 		
-		var compiled_content = 'var content = "";';
+		var compiled_content = '';
 		
 		for (i = 0; i < compiled_tags.length; i++) {
 			if (compiled_tags[i] == undefined) {
@@ -787,7 +787,7 @@ NodeSmarty.func = {
 			compiled_content += "\ncontent += \""+text_blocks[i].replace(this._line_regexp," \\n").replace(this._replace_shashes_regexp, '\\$1')+"\";\n";
 		}
 		
-		return compiled_content;
+		return !compiled_content ? null : compiled_content;
 	},	
 	
 	/**
@@ -820,7 +820,7 @@ NodeSmarty.func = {
 		var _this = this;
 		
 		//
-		this.fs.readFile(this._TemplateDir+file, 'utf8', function (err,data) {
+		this._fs.readFile(this._TemplateDir+file, 'utf8', function (err,data) {
 			if (err) {
 				return this._syntax_error('err'+err);
 			}
@@ -849,8 +849,7 @@ NodeSmarty.func = {
 		/**
 		 * variable global this!
 		 */
-		var __this = this,
-			updFile = false,
+		var updFile = false,
 			fetch,
 			data;
 		
@@ -858,11 +857,11 @@ NodeSmarty.func = {
 		 * search compile file && check is
 		 */
 		try { 
-			var templateSave = this.fs.statSync(this._TemplateDir+file);
-			var compileSave = this.fs.statSync(this._CompileDir+file.replace(this._slash_regexp, this._slash_replace)+".js");
+			var templateSave = this._fs.statSync(this._TemplateDir+file);
+			var compileSave = this._fs.statSync(this._CompileDir+file.replace(this._slash_regexp, this._slash_replace)+".js");
 			
 			if((new Date(templateSave['mtime'])).getTime()/1000.0 < (new Date(compileSave['mtime'])).getTime()/1000.0) {
-				fetch = this.fs.readFileSync(this._CompileDir+file.replace(this._slash_regexp, this._slash_replace)+'.js', 'utf8');
+				fetch = this._fs.readFileSync(this._CompileDir+file.replace(this._slash_regexp, this._slash_replace)+'.js', 'utf8');
 			}
 			else {
 				updFile = true;
@@ -873,13 +872,12 @@ NodeSmarty.func = {
 		} 
 		
 		if(updFile) {
-			data = this.fs.readFileSync(this._TemplateDir+file, 'utf8');
+			data = this._fs.readFileSync(this._TemplateDir+file, 'utf8');
 			fetch = this._fetchPost(data);
-			this.fs.writeFileSync(this._CompileDir+file.replace(this._slash_regexp, this._slash_replace)+'.js', fetch, 'utf8');
+			this._fs.writeFileSync(this._CompileDir+file.replace(this._slash_regexp, this._slash_replace)+'.js', fetch, 'utf8');
 		}
-		
-		eval(fetch); //=> return variable "content";
+	
 		//
-		return content;
+		return new Function("var __this = this, content = ''; "+fetch+"; return content;").call(this); //=> return variable "content";
 	}
 } 
