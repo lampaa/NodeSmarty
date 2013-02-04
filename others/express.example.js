@@ -13,9 +13,9 @@ var NodeSmarty = require('./libs/NodeSmarty');
 var Template = NodeSmarty();
 
 Template
-   .setTemplateDir('./views/templates/')
-   .setCompileDir('./views/compile/')
-   .setCacheDir('./views/cache/'); 
+	.setTemplateDir('./views/templates/')
+	.setCompileDir('./views/compile/')
+	.setCacheDir('./views/cache/'); 
    
    
 Template.assign({
@@ -27,9 +27,9 @@ Template.assign({
 app.get('/', function(req, res){
 	mySql.query('SELECT * FROM test', function(error, result, fields){
 
-        if (error){
-            throw error;
-        }
+		if (error){
+			throw error;
+		}
 		
 		Template.assign({
 			'values':fields
@@ -40,7 +40,7 @@ app.get('/', function(req, res){
 		res.send(Final);
 
 		client.end();
-    });	
+	});	
 });
 
 app.listen(3000);
