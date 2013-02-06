@@ -11,12 +11,19 @@ Quick start
 ```js
 var NodeSmarty = require('../controllers/NodeSmarty');
 
-var Template = new NodeSmarty();
-
-Template
-   .setTemplateDir('./views/templates/')
-   .setCompileDir('./views/compile/')
-   .setCacheDir('./views/cache/'); 
+var Template = new NodeSmarty({    
+   'templateDir':'./templates/',
+   'compileDir':'./compile/',
+   'cacheDir':'./cache/'
+});	
+/**
+* var Template = new NodeSmarty();
+* 
+* Template
+*    .setTemplateDir('./views/templates/')
+*    .setCompileDir('./views/compile/')
+*    .setCacheDir('./views/cache/');   
+*/
 ```
 
 <hr>
@@ -46,6 +53,14 @@ Array:
 {foreach from=$Array item=Foo}
    {$Foo}
 {/foreach} 
+
+{if $Value != 'mango'}
+	Условие не верно!
+{elseif $Value == 'Value' && 20*40 == 800 AND ($Value2 || !$Value3)}
+	Условие верно!
+{else}
+	Ошибка!
+{/if}
 ```
 
 <hr>
@@ -53,3 +68,13 @@ Array:
 Fast processing
 ===============
 Все шаблоны при использовании проходят дополнительную обработку - компиляцию. Шаблон компилируется в чистый (<i>native</i>) <i>JavaScript</i> код, причем как компиляция, так и исполнение кода являются самыми быстрыми при сравнении с остальными шаблонизаторами!
+
+```js
+Template.fetch('template.html', function(data) {
+   console.log());
+}); 
+
+/**
+ * var Final = Template.fetch('template.html');
+ */
+```
