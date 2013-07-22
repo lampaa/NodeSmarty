@@ -12,16 +12,10 @@ function NodeSmarty(args) {
 
 NodeSmarty.func = {
 	constructor: NodeSmarty,
-	
-	assignes: {},
-	ldq:'{',
-	rdq:'}',
-	
-	_foreach_master: {'if':false, 'counter':0, 'variables':{}, 'variables_vars':{}},
-	_CompileDir:false,
-	_TemplateDir:false,
-	_CacheDir:false,
-	_preCompiler:{},
+	/**
+	 * use File System module
+	 */
+	_fs: require('fs'),
 	
 	//_memCompile: false,
 	//_memCache: false,
@@ -29,10 +23,16 @@ NodeSmarty.func = {
 	 * initializate
 	 */
 	init: function(args) {
-		/**
-		 * use File System module
-		 */
-		this._fs = require('fs');
+		this.assignes = {};
+		this.ldq = '{';
+		this.rdq = '}';
+		
+		this._foreach_master = {'if':false, 'counter':0, 'variables':{}, 'variables_vars':{}};
+		this._CompileDir = false;
+		this._TemplateDir = false;
+		this._CacheDir = false;
+		this._preCompiler = {};
+
 		
 		/**
 		 * set start variables
@@ -82,7 +82,6 @@ NodeSmarty.func = {
 		 */
 		this._match_if_tag = /(\-?0[xX][0-9a-fA-F]+|\-?\d+(?:\.\d+)?|\$\w+|\.\d+|!==|===|==|!=|<>|<<|>>|<=|>=|\&\&|\|\||\(|\)|,|\!|\^|=|\&|\~|<|>|\||\%|\+|\-|\/|\*|@|\b\S+|\S\b\w+\b\S+)/g;
 		  
-
 		return this;
 	},
 	
