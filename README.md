@@ -11,13 +11,13 @@ Quick start
 ```js
 var NodeSmarty = require('../controllers/NodeSmarty');
 
-var Template = new NodeSmarty({    
+var Template = NodeSmarty({    
    'templateDir':'./templates/',
    'compileDir':'./compile/',
    'cacheDir':'./cache/'
 });	
 /**
-* var Template = new NodeSmarty();
+* var Template = NodeSmarty();
 * 
 * Template
 *    .setTemplateDir('./views/templates/')
