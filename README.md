@@ -71,7 +71,7 @@ Fast processing
 
 ```js
 Template.fetch('template.html', function(data) {
-   console.log());
+   console.log();
 }); 
 
 /**
