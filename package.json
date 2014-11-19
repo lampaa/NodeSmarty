@@ -1,0 +1,24 @@
+{
+  "name": "NodeSmarty",
+  "version": "0.4",
+  "description": "NodeSmarty is a template engine for JavaScript",
+  "author": "Lampa <https://github.com/lampaa>",
+  "contributors": [{
+  "name": "lampaa",
+  "email": "olala_ah@rambler.ru"
+  }],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lampaa/NodeSmarty"
+  },
+  "bugs": {
+    "url": "https://github.com/lampaa/NodeSmarty/issues"
+  },
+  "keywords": [
+    "smarty",
+    "nodesmarty",
+    "template"
+  ],
+  "license": "MIT"
+}
